@@ -1,1 +1,1 @@
-# dr-pill
+# Dr. Pill
