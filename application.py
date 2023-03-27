@@ -1,6 +1,7 @@
 import csv
 import time
 import tkinter as tk
+import api.open_cv as open_cv
 
 def add_prescription():
     pill_name = name_entry.get()
@@ -21,31 +22,37 @@ def add_prescription():
 
 def scan_bottle():
     # WRITE YOUR CODE HERE SHUBH
-    
-    name_entry.delete(0, tk.END)
+    scanner = open_cv.OpenCV()
+    data = scanner.execute_scan()
+    pill_qty = data[0]
+    interval_num = data[1]
+    interval_duration = data[2]
+    pill_name = name_entry.get()
+    start_time = start_entry.get()
+    # name_entry.delete(0, tk.END)
     name_entry.insert(0, pill_name)
-    qty_entry.delete(0, tk.END)
+    # qty_entry.delete(0, tk.END)
     qty_entry.insert(0, pill_qty)
-    interval_entry.delete(0, tk.END)
+    # interval_entry.delete(0, tk.END)
     interval_entry.insert(0, interval_num)
-    duration_entry.delete(0, tk.END)
+    # duration_entry.delete(0, tk.END)
     duration_entry.insert(0, interval_duration)
-    start_entry.delete(0, tk.END)
-    start_entry.insert(0, pill_name)
+    # start_entry.delete(0, tk.END)
+    start_entry.insert(0, start_time)
 
 window = tk.Tk()
 window.title("Prescription Schedule")
 window.geometry("400x200")
-
+print("Code got here")
 menu_bar = tk.Menu(window)
 window.config(menu=menu_bar)
 
 file_menu = tk.Menu(menu_bar, tearoff=False)
 menu_bar.add_cascade(label="Entry Method", menu=file_menu)
 
-file_menu.add_command(label="Manual Entry", command=lambda: scan_button.config(state="normal"))
+file_menu.add_command(label="Manual Entry", command=lambda: scan_button.config(state="disabled"))
 
-file_menu.add_command(label="Scan Bottle", command=lambda: scan_button.config(state="disabled"))
+file_menu.add_command(label="Scan Bottle", command=lambda: scan_button.config(state="normal"))
 
 name_label = tk.Label(window, text="Medicine:")
 name_label.grid(column=0, row=0, padx=5, pady=5)

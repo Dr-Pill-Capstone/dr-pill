@@ -3,178 +3,146 @@ import pytesseract
 import re
 import csv
 
-FILENAME = "dispening_schedule.csv"
+class OpenCV:
+    def __init__(self):
+        return
 
-def scan_label():
-    print("Scanning Label")
+    FILENAME = "dispening_schedule.csv"
 
-    # C:\Program Files\Tesseract-OCR\tesseract.exe
-    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    def scan_label(self):
+        print("Scanning Label")
 
-    # Set up the webcam
-    cap = cv2.VideoCapture(0)
+        # C:\Program Files\Tesseract-OCR\tesseract.exe
+        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-    # Define the name of the output file
-    output_file = 'scanned_text.txt'
+        # Set up the webcam
+        cap = cv2.VideoCapture(0)
 
-    f = open(output_file, "w")
+        # Define the name of the output file
+        output_file = 'scanned_text.txt'
 
-    while True:
-        # Capture frame-by-frame
-        ret, frame = cap.read()
+        f = open(output_file, "w")
 
-        # Convert the frame to grayscale
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        while True:
+            # Capture frame-by-frame
+            ret, frame = cap.read()
 
-        # Enhance the image using a bilateral filter
-        enhanced = cv2.bilateralFilter(gray, 11, 17, 17)
+            # Convert the frame to grayscale
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # Use Pytesseract to extract text from the image
-        text = pytesseract.image_to_string(enhanced)
+            # Enhance the image using a bilateral filter
+            enhanced = cv2.bilateralFilter(gray, 11, 17, 17)
 
-        # Print the resulting text to the console
-        print(text)
-        f.write(text)
+            # Use Pytesseract to extract text from the image
+            text = pytesseract.image_to_string(enhanced)
 
-        # Display the resulting image
-        cv2.imshow('Enhanced Image', enhanced)
+            # Print the resulting text to the console
+            print(text)
+            f.write(text)
 
-        # Exit the program when the 'q' key is pressed
-        if cv2.waitKey(1) == ord('q'):
-            break
+            # Display the resulting image
+            cv2.imshow('Enhanced Image', enhanced)
 
-    f.close()
-    # Release the capture
-    cap.release()
-    cv2.destroyAllWindows()
-    print("Scanning Complete")
-    return output_file
+            # Exit the program when the 'q' key is pressed
+            if cv2.waitKey(1) == ord('q'):
+                break
 
-def interval_to_number(interval_word):
-    if interval_word.lower() == "once":
-        return 1
-    elif interval_word.lower() == "twice":
-        return 2
-    elif interval_word.lower() == "thrice":
-        return 3
-    else:
-        raise ValueError("Invalid interval word: " + interval_word)
+        f.close()
+        # Release the capture
+        cap.release()
+        cv2.destroyAllWindows()
+        print("Scanning Complete")
+        return output_file
 
-def most_frequent(List):
-    counter = 0
-    num = List[0]
-     
-    for i in List:
-        curr_frequency = List.count(i)
-        if(curr_frequency> counter):
-            counter = curr_frequency
-            num = i
- 
-    return num
-
-def parse_label(file_path):
-    print("Parsing Label Info")
-
-    with open(file_path, 'r') as file:
-        text = file.read()
-
-    print(text)
-    # Define the regular expression patterns
-    quantity_pattern = r'(\d+[- ]?\d*)\s*(tablet|tablets|tab|tabs|pills?)'
-    interval_pattern = r'(every|per)?\s*(\d+[- ]?\d*)\s*(hours|hour|hrs|minute|mins|min|days|day|daily|times|doses)'
-    # Extract medicine dosage information using regular expressions
-    quantity_matches = re.findall(quantity_pattern, text, re.IGNORECASE)
-    interval_matches = re.findall(interval_pattern, text, re.IGNORECASE)
-
-    # Print the extracted information to the console
-    if quantity_matches and interval_matches:
-        print('Dosage information:')
-        for i in range(min(len(quantity_matches), len(interval_matches))):
-            quantity = quantity_matches[i][0]
-            quantity_keyword = quantity_matches[i][1]
-            interval = interval_matches[i][1]
-            interval_keyword = interval_matches[i][2]
-            print('Quantity:', quantity, quantity_keyword)
-            print('Interval:', interval, interval_keyword)
-
-        # find the quantity that was scanned the most
-        qty = most_frequent(quantity_matches)
-        itrvl = most_frequent(interval_matches)
-        itrvl_list = list(itrvl)
-        itrvl_list[1] = itrvl_list[1].strip()
-        if not itrvl_list[1].isnumeric():
-            itrvl_list[1] = interval_to_number(itrvl_list[1])
-
-        pill_name = input("Please enter pill name")
-        print(f"Pill Name: {pill_name}")
-        
-        day_keys = ["days","day","dy","daily"]
-        hour_keys = ["hours","hour","hr","hrs"]
-        minute_keys = ["minutes", "minute","min","mins"]
-        second_keys = ["seconds","second","sec","secs"]
-
-        interval_keyword = interval_keyword.lower()
-
-        if interval_keyword in day_keys:
-            interval_keyword = "day"
-        elif interval_keyword in hour_keys:
-            interval_keyword = "hour"
-        elif interval_keyword in minute_keys:
-            interval_keyword = "minute"
-        elif interval_keyword in second_keys:
-            interval_keyword = "second"
+    def interval_to_number(self,interval_word):
+        if interval_word.lower() == "once":
+            return 1
+        elif interval_word.lower() == "twice":
+            return 2
+        elif interval_word.lower() == "thrice":
+            return 3
         else:
-            interval_keyword = input("Keyword match not found, please enter dispensing interval: ")
-            print(f"Interval: {interval}")
+            raise ValueError("Invalid interval word: " + interval_word)
 
-        data = [pill_name,qty[0],itrvl_list[1],interval_keyword]
-        print(f"Parsed Info: {data}")
-        file.close()
-        return data
+    def most_frequent(self,List):
+        counter = 0
+        num = List[0]
+        
+        for i in List:
+            curr_frequency = List.count(i)
+            if(curr_frequency> counter):
+                counter = curr_frequency
+                num = i
     
-    else:
-        file.close()
-        print("No information found")
-        pass
+        return num
 
+    def parse_label(self,file_path):
+        print("Parsing Label Info")
 
-def write_to_csv(data):
+        with open(file_path, 'r') as file:
+            text = file.read()
 
-    print("Writing to CSV")
-    try:
-        with open(FILENAME, 'a', newline='') as csv_file:
-            writer = csv.writer(csv_file)
-            writer.writerow(data)
-        csv_file.close()
-        print("New pill schedule added")
-    except Exception as e:
-        print(f'Error adding info {data} to {FILENAME}: {e}.')
-        csv_file.close()
+        print(text)
+        # Define the regular expression patterns
+        quantity_pattern = r'(\d+[- ]?\d*)\s*(tablet|tablets|tab|tabs|pills?)'
+        interval_pattern = r'(every|per)?\s*(\d+[- ]?\d*)\s*(hours|hour|hrs|minute|mins|min|days|day|daily|times|doses)'
+        # Extract medicine dosage information using regular expressions
+        quantity_matches = re.findall(quantity_pattern, text, re.IGNORECASE)
+        interval_matches = re.findall(interval_pattern, text, re.IGNORECASE)
 
-def clear_csv():
+        # Print the extracted information to the console
+        if quantity_matches and interval_matches:
+            print('Dosage information:')
+            for i in range(min(len(quantity_matches), len(interval_matches))):
+                quantity = quantity_matches[i][0]
+                quantity_keyword = quantity_matches[i][1]
+                interval = interval_matches[i][1]
+                interval_keyword = interval_matches[i][2]
+                print('Quantity:', quantity, quantity_keyword)
+                print('Interval:', interval, interval_keyword)
 
-    print("Clearing CSV")
-    # clear the file
-    f = open(FILENAME, "w+")
+            # find the quantity that was scanned the most
+            qty = self.most_frequent(quantity_matches)
+            itrvl = self.most_frequent(interval_matches)
+            itrvl_list = list(itrvl)
+            itrvl_list[1] = itrvl_list[1].strip()
+            if not itrvl_list[1].isnumeric():
+                itrvl_list[1] = self.interval_to_number(itrvl_list[1])
+            
+            day_keys = ["days","day","dy","daily"]
+            hour_keys = ["hours","hour","hr","hrs"]
+            minute_keys = ["minutes", "minute","min","mins"]
+            second_keys = ["seconds","second","sec","secs"]
 
-    # add the row header again
-    writer = csv.writer(f,delimiter=',')
-    writer.writerow(['Pill Number', 'Pill Quantity', 'Interval Length', 'Interval Keyword'])
-    f.close()
+            interval_keyword = interval_keyword.lower()
 
-def main():
-    print("Running main")
+            if interval_keyword in day_keys:
+                interval_keyword = "day"
+            elif interval_keyword in hour_keys:
+                interval_keyword = "hour"
+            elif interval_keyword in minute_keys:
+                interval_keyword = "minute"
+            elif interval_keyword in second_keys:
+                interval_keyword = "second"
+            else:
+                raise Exception("Keyword match not found")
 
-    # scan pill bottle label
-    scan_file = scan_label()
+            data = [qty[0],itrvl_list[1],interval_keyword]
+            file.close()
+            return data
+        
+        else:
+            file.close()
+            print("No information found")
+            pass
 
-    # extract info from scanned text
-    dosage_info = parse_label(scan_file)
+    def execute_scan(self):
+        print("Running scan")
 
-    # add dipensing schdule to csv
-    write_to_csv(dosage_info)
+        # scan pill bottle label
+        scan_file = self.scan_label()
 
-    # clear file contents
-    # clear_csv()
+        # extract info from scanned text
+        dosage_info = self.parse_label(scan_file)
 
-main()
+        return dosage_info
