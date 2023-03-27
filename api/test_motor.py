@@ -38,7 +38,7 @@ import time
 
 left_motor = motor.ServoMotor(11)
 print("Rotating motor to max at 180 degrees.")
-left_motor.set_angle(180)
+left_motor.set_angle(165)
 time.sleep(1)
 print("Reseting to default position at 0 degrees.")
 left_motor.set_angle(0)
