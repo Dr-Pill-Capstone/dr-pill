@@ -21,7 +21,6 @@ def add_prescription():
         start_entry.delete(0, tk.END)
 
 def scan_bottle():
-    # WRITE YOUR CODE HERE SHUBH
     scanner = open_cv.OpenCV()
     data = scanner.execute_scan()
     pill_qty = data[0]
@@ -43,7 +42,7 @@ def scan_bottle():
 window = tk.Tk()
 window.title("Prescription Schedule")
 window.geometry("400x200")
-print("Code got here")
+
 menu_bar = tk.Menu(window)
 window.config(menu=menu_bar)
 
