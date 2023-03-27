@@ -10,7 +10,7 @@ class ServoMotor:
         self.pwm.start(0)
     
     def set_angle(self, angle):
-        duty_cycle = angle / 18.0 + 2.5 # calculate duty cycle from angle
+        duty_cycle = angle / 18 + 2 # calculate duty cycle from angle
         self.pwm.ChangeDutyCycle(duty_cycle)
     
     def set_position(self, position):
