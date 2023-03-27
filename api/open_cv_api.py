@@ -10,8 +10,8 @@ def home():
 
 @test_bp.route('/scan_label/')
 def scan_label():
-    open_cv.main()
-    return "<h1> This is the test page. </h1>"
+    data = open_cv.main()
+    return data
 
 @test_bp.route('/creators', methods=['GET'])
 def test_creators():
