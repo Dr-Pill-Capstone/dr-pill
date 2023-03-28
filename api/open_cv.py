@@ -13,7 +13,7 @@ class OpenCV:
         print("Scanning Label")
 
         # C:\Program Files\Tesseract-OCR\tesseract.exe
-        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+        pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
 
         # Set up the webcam
         cap = cv2.VideoCapture(0)

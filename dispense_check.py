@@ -9,7 +9,7 @@ def dispense_pill(pill_qty, pill_name):
 
 while True:
     schedule = []
-    with open('dispensing_s(chedule.csv', 'r') as file:
+    with open('dispensing_schedule.csv', 'r') as file:
         reader = csv.reader(file)
         for row in reader:
             schedule.append(row)

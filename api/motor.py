@@ -1,12 +1,11 @@
 import RPi.GPIO as GPIO
-import time
 
 class ServoMotor:
     def __init__(self, pin):
         self.pin = pin
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.pin, GPIO.OUT)
-        self.pwm = GPIO.PWM(self.pin, 50) # 50 Hz PWM frequency
+        self.pwm = GPIO.PWM(self.pin, 25) # 50 Hz PWM frequency
         self.pwm.start(0)
     
     def set_angle(self, angle):
