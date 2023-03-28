@@ -23,6 +23,7 @@ def add_prescription():
 def scan_bottle():
     scanner = open_cv.OpenCV()
     data = scanner.execute_scan()
+    print(data)
     pill_qty = data[0]
     interval_num = data[1]
     interval_duration = data[2]
